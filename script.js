@@ -168,3 +168,39 @@ colorSwatches.forEach(swatch => {
         adjustTextColor(selectedColor); // Ajustar el color del texto
     });
 });
+
+
+//Mensaje novios
+const brideImage = document.querySelector('.image-wrapper.bride');
+const groomImage = document.querySelector('.image-wrapper.groom');
+const messageBoth = document.getElementById('message-both');
+const messageBride = document.getElementById('message-bride');
+const messageGroom = document.getElementById('message-groom');
+
+brideImage.addEventListener('click', () => {
+    if (brideImage.classList.contains('active')) {
+        brideImage.classList.remove('active');
+        messageBride.classList.remove('active');
+        messageBoth.classList.add('active');
+    } else {
+        brideImage.classList.add('active');
+        groomImage.classList.remove('active');
+        messageBoth.classList.remove('active');
+        messageGroom.classList.remove('active');
+        messageBride.classList.add('active');
+    }
+});
+
+groomImage.addEventListener('click', () => {
+    if (groomImage.classList.contains('active')) {
+        groomImage.classList.remove('active');
+        messageGroom.classList.remove('active');
+        messageBoth.classList.add('active');
+    } else {
+        groomImage.classList.add('active');
+        brideImage.classList.remove('active');
+        messageBoth.classList.remove('active');
+        messageBride.classList.remove('active');
+        messageGroom.classList.add('active');
+    }
+});
