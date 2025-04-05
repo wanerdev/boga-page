@@ -80,7 +80,7 @@ p {
 
 /* Portada */
 .cover {
-    background: linear-gradient(rgba(96, 105, 72, 0.8), rgba(96, 105, 72, 0.6)), url('https://images.unsplash.com/photo-1519225421980-715cb0215aed?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center;
+    background: linear-gradient(rgba(96, 105, 72, 0.8), rgba(96, 105, 72, 0.6)), url('/fondo2.jpeg') no-repeat center center;
     background-size: cover;
     color: white;
     text-align: center;
@@ -127,7 +127,7 @@ p {
 
 /* Página de amor */
 .love-page {
-    background: linear-gradient(rgba(96, 105, 72, 0.9), rgba(96, 105, 72, 0.7)), url('https://images.unsplash.com/photo-1518199266791-5375a83190b7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center;
+    background: linear-gradient(rgba(96, 105, 72, 0.9), rgba(96, 105, 72, 0.7)), url('/fondolove.jpeg') no-repeat center center;
     background-size: cover;
     color: white;
 }
@@ -302,4 +302,176 @@ footer { padding: 2rem; text-align: center; background-color: #333; color: white
     .gift-options { flex-direction: column; align-items: center; }
     .plant-decoration { display: none; }
     .love-message { font-size: 1.5rem; }
+}
+
+
+/*
+*CONTADOR FECHA
+*/
+.countdown {
+    margin: 2rem 0;
+    text-align: center;
+    color: #fff;
+}
+
+.countdown h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    font-family: 'Playfair Display', serif;
+}
+
+.countdown-timer {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.countdown-timer .countdown-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 60px;
+}
+
+.countdown-timer .countdown-item span:first-child {
+    font-size: 2.5rem;
+    font-weight: bold;
+    line-height: 1;
+    font-family: 'Playfair Display', serif;
+}
+
+.countdown-timer .countdown-item span:last-child {
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 0.5rem;
+}
+
+
+/*
+* PALETA DE COLORES
+*/
+.color-palette {
+    background: linear-gradient(135deg, #f5e8e4 0%, #e8f0f2 100%);
+    padding: 4rem 2rem;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.5s ease;
+    color: #333; /* Color inicial del texto */
+}
+
+.color-palette h2,
+.color-palette p,
+.color-palette .icon {
+    transition: color 0.5s ease; /* Transición suave para el color del texto */
+}
+
+.color-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.tab-btn {
+    padding: 0.8rem 2rem;
+    font-size: 1.2rem;
+    border: none;
+    background: #fff;
+    color: #333;
+    cursor: pointer;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    font-family: 'Playfair Display', serif;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.tab-btn.active {
+    background: #745539; /* Color Terracota como marcador */
+    color: #fff;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.tab-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.tab-btn:hover::after {
+    opacity: 1;
+}
+
+.color-content {
+    position: relative;
+    min-height: 200px;
+}
+
+.color-panel {
+    display: none;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    animation: slideIn 0.5s ease forwards;
+}
+
+.color-panel.active {
+    display: flex;
+}
+
+.color-swatch {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    border: 3px solid #fff;
+}
+
+.color-swatch:hover {
+    transform: scale(1.1);
+}
+
+.color-swatch::after {
+    content: attr(data-color);
+    position: absolute;
+    bottom: -2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.9);
+    padding: 0.5rem 1rem;
+    border-radius: 15px;
+    font-size: 0.9rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    white-space: nowrap;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.color-swatch:hover::after {
+    opacity: 1;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
