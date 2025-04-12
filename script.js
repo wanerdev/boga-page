@@ -56,7 +56,6 @@ downloadForm.addEventListener('submit', (e) => {
     }
 });
 
-// Función para descargar el PDF existente
 // Función para descargar el PDF existente y mostrar mensaje de agradecimiento
 function downloadInvitation(nombre) {
     const pdfUrl = './invitacion_boda_y_w.pdf';
@@ -69,17 +68,6 @@ function downloadInvitation(nombre) {
         <p>¡Gracias, ${nombre}! Tu invitación está lista</p>
     `;
     document.body.appendChild(thankYouMessage);
-
-    // Lanzar confeti adicional
-    confetti({
-        particleCount: 150,
-        spread: 80,
-        origin: { y: 0.4 },
-        colors: ['#6B8A7A', '#A68B76', '#C9D2E2', '#B5A691'],
-        shapes: ['circle', 'heart', 'star'],
-        scalar: 1.5,
-        drift: 0.3,
-    });
 
     // Descargar el PDF
     fetch(pdfUrl)
@@ -94,13 +82,13 @@ function downloadInvitation(nombre) {
             document.body.removeChild(link);
             window.URL.revokeObjectURL(url);
 
-            // Eliminar el mensaje después de 4 segundos
+            // Eliminar el mensaje después de 5 segundos con un desvanecimiento más gradual
             setTimeout(() => {
                 thankYouMessage.style.opacity = '0';
                 setTimeout(() => {
                     document.body.removeChild(thankYouMessage);
-                }, 500); // Esperar a que termine la animación de desvanecimiento
-            }, 4000);
+                }, 500); // Esperar a que termine la animación de desvanecimiento (1.2 segundos)
+            }, 1500); // Mostrar el mensaje durante 5 segundos
         })
         .catch(error => {
             console.error('Error al descargar el PDF:', error);
@@ -110,7 +98,6 @@ function downloadInvitation(nombre) {
             document.body.removeChild(thankYouMessage);
         });
 }
-
 // Animación al hacer scroll
 const fadeElements = document.querySelectorAll('.fade-in');
 const fadeObserver = new IntersectionObserver((entries) => {
@@ -239,12 +226,12 @@ groomImage.addEventListener('click', () => {
 // Bandera para asegurar que el confeti se lance solo una vez
 let hasConfettiFired = false;
 
-// Función para lanzar confeti
 function launchConfetti() {
-    if (hasConfettiFired) return; // No ejecutar si ya se lanzó
-    hasConfettiFired = true; // Marcar como ejecutado
+    if (hasConfettiFired) return;
+    hasConfettiFired = true;
+    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
     confetti({
-        particleCount: 100,
+        particleCount: isMobile ? 50 : 100, // Menos partículas en móviles
         spread: 70,
         origin: { y: 0.6 },
         colors: ['#6B8A7A', '#A68B76', '#C9D2E2', '#B5A691'],
@@ -254,6 +241,5 @@ function launchConfetti() {
     });
 }
 
-// Lanzar confeti solo al cargar la página
 window.addEventListener('load', launchConfetti);
 
