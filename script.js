@@ -57,10 +57,31 @@ downloadForm.addEventListener('submit', (e) => {
 });
 
 // Función para descargar el PDF existente
+// Función para descargar el PDF existente y mostrar mensaje de agradecimiento
 function downloadInvitation(nombre) {
     const pdfUrl = './invitacion_boda_y_w.pdf';
     const fileName = `Invitacion_Boda_${nombre.replace(" ", "_")}.pdf`;
-    
+
+    // Crear el mensaje de agradecimiento
+    const thankYouMessage = document.createElement('div');
+    thankYouMessage.className = 'thank-you-message';
+    thankYouMessage.innerHTML = `
+        <p>¡Gracias, ${nombre}! Tu invitación está lista</p>
+    `;
+    document.body.appendChild(thankYouMessage);
+
+    // Lanzar confeti adicional
+    confetti({
+        particleCount: 150,
+        spread: 80,
+        origin: { y: 0.4 },
+        colors: ['#6B8A7A', '#A68B76', '#C9D2E2', '#B5A691'],
+        shapes: ['circle', 'heart', 'star'],
+        scalar: 1.5,
+        drift: 0.3,
+    });
+
+    // Descargar el PDF
     fetch(pdfUrl)
         .then(response => response.blob())
         .then(blob => {
@@ -72,11 +93,21 @@ function downloadInvitation(nombre) {
             link.click();
             document.body.removeChild(link);
             window.URL.revokeObjectURL(url);
+
+            // Eliminar el mensaje después de 4 segundos
+            setTimeout(() => {
+                thankYouMessage.style.opacity = '0';
+                setTimeout(() => {
+                    document.body.removeChild(thankYouMessage);
+                }, 500); // Esperar a que termine la animación de desvanecimiento
+            }, 4000);
         })
         .catch(error => {
             console.error('Error al descargar el PDF:', error);
             errorMessage.textContent = 'Error al descargar la invitación';
             errorMessage.style.display = 'block';
+            // Eliminar el mensaje de agradecimiento si hay error
+            document.body.removeChild(thankYouMessage);
         });
 }
 
@@ -204,3 +235,25 @@ groomImage.addEventListener('click', () => {
         messageGroom.classList.add('active');
     }
 });
+
+// Bandera para asegurar que el confeti se lance solo una vez
+let hasConfettiFired = false;
+
+// Función para lanzar confeti
+function launchConfetti() {
+    if (hasConfettiFired) return; // No ejecutar si ya se lanzó
+    hasConfettiFired = true; // Marcar como ejecutado
+    confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ['#6B8A7A', '#A68B76', '#C9D2E2', '#B5A691'],
+        shapes: ['circle', 'square', 'star'],
+        scalar: 1.2,
+        drift: 0.5,
+    });
+}
+
+// Lanzar confeti solo al cargar la página
+window.addEventListener('load', launchConfetti);
+
