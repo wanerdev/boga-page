@@ -87,8 +87,8 @@ function downloadInvitation(nombre) {
                 thankYouMessage.style.opacity = '0';
                 setTimeout(() => {
                     document.body.removeChild(thankYouMessage);
-                }, 500); // Esperar a que termine la animación de desvanecimiento (1.2 segundos)
-            }, 1500); // Mostrar el mensaje durante 5 segundos
+                }, 300); // Esperar a que termine la animación de desvanecimiento (1.2 segundos)
+            }, 1000); // Mostrar el mensaje durante 5 segundos
         })
         .catch(error => {
             console.error('Error al descargar el PDF:', error);
@@ -224,22 +224,22 @@ groomImage.addEventListener('click', () => {
 });
 
 // Bandera para asegurar que el confeti se lance solo una vez
-let hasConfettiFired = false;
+// let hasConfettiFired = false;
 
-function launchConfetti() {
-    if (hasConfettiFired) return;
-    hasConfettiFired = true;
-    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
-    confetti({
-        particleCount: isMobile ? 50 : 100, // Menos partículas en móviles
-        spread: 70,
-        origin: { y: 0.6 },
-        colors: ['#6B8A7A', '#A68B76', '#C9D2E2', '#B5A691'],
-        shapes: ['circle', 'square', 'star'],
-        scalar: 1.2,
-        drift: 0.5,
-    });
-}
+// function launchConfetti() {
+//     if (hasConfettiFired) return;
+//     hasConfettiFired = true;
+//     const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+//     confetti({
+//         particleCount: isMobile ? 50 : 100, // Menos partículas en móviles
+//         spread: 70,
+//         origin: { y: 0.6 },
+//         colors: ['#6B8A7A', '#A68B76', '#C9D2E2', '#B5A691'],
+//         shapes: ['circle', 'square', 'star'],
+//         scalar: 1.2,
+//         drift: 0.5,
+//     });
+// }
 
-window.addEventListener('load', launchConfetti);
+// window.addEventListener('load', launchConfetti);
 
