@@ -1,10 +1,63 @@
-// Array asociativo de invitados (número de teléfono: nombre)
 const invitados = {
-    "1234567890": "Ana Pérez",
-    "0987654321": "Juan Gómez",
-    "5555555555": "María López",
-    "4444444444": "Carlos Rodríguez",
-    "3333333333": "Sofía Martínez",
+    // Iglesia (13 personas)
+    "+18296786377": "Elvira y José Aquino",
+    "+18298634708": "Junior y Deyanira",
+    "+18094790612": "Yasmeiry y Juan Carlos",
+    "+18492050067": "Brandy",
+    "+18492227408": "Mariel",
+    "+18299336890": "Roy Anderson",
+    "+18294875210": "La Chapel",
+    "+18094284122": "Manuel",
+    "+18295375463": "Josabeth y Robin",
+
+    // Amigos (13 personas)
+    "+18094196517": "Yanna",
+    "+18496547674": "Wanda",
+    "+18496214436": "Ineraliza",
+    "+18293322448": "Yireth y Ramon",
+    "+18295254546": "Carlos y Cristina",
+    "+13472232193": "Patricia",
+    "+18092597465": "Jhon",
+    "+18495041318": "Nidio",
+    "+18297126544": "Marcos",
+    "+18492081610": "Noviecito",
+    "+18299887457": "Ashley",
+
+    // Familia Abad (5 personas)
+    "+18093586644": "Orfelina y Víctor",
+    "+18299388107": "Rosario",
+    "+18098909695": "Delmira",
+    "+18299069193": "Ariana",
+
+    // Familia (17 personas)
+    "+18497509333": "Carlos y Yudy",
+    "+18295621146": "Carlos Junior y Maricris",
+    "+18298689207": "Carlos Enríquez",
+    "+18296994769": "Melaiony",
+    "+18456752107": "Isaac y Felicia",
+    "+18498816923": "Alexander y Elizabeth",
+    "+18292620682": "Leidy y Tomas",
+    "+18498178401": "Lirrus",
+    "+13479329940": "Nelson y Sainy",
+    "+16469860892": "Leimy y Emily",
+
+    // Familia de Abuelos (13 personas)
+    "+18097620242": "Nidia y Anyi",
+    "+18293745836": "Ramona",
+    "+18498633490": "Joséfina",
+    "+18096674065": "Evangélito",
+    "+18097783873": "Dubo",
+    "+18092678873": "Serafin", // Nota: Mismo número que Joséfina, podría ser un error
+    "+18093863434": "Juan",
+    "+18096651197": "Joeli",
+    "+18092147954": "Eli",
+    "+18295491750": "Nery",
+    "+34624586408": "Sara",
+    "+18298159086": "Noemí",
+
+    // Familia Emiliano (2 personas)
+    "+18092171976": "Yessenia y Edwar",
+    "+18098280095": "Yessy"
 };
 
 // Referencias al DOM
@@ -43,16 +96,84 @@ dots.forEach(dot => {
 // Manejo del formulario para descargar invitación
 downloadForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    
-    const phone = document.getElementById('phone').value;
-    const nombreInvitado = invitados[phone];
-    
+
+    const countryCode = document.getElementById('country-code').value;
+    const country = document.getElementById('country-code').selectedOptions[0].dataset.country;
+    let phone = document.getElementById('phone').value;
+
+    // Limpiar el número: eliminar espacios, guiones y otros caracteres no numéricos
+    phone = phone.replace(/[^0-9]/g, '');
+
+    // Validar según el país
+    let isValid = false;
+    let errorText = '';
+    if (!countryCode) {
+        errorText = 'Por favor, selecciona un país.';
+    } else if (countryCode === '+34') {
+        // España: 9 dígitos
+        isValid = phone.length === 9;
+        errorText = 'Por favor, ingresa un número válido de 9 dígitos para España (ej. 612345678).';
+    } else if (countryCode === '+1' && country === 'US') {
+        // EE.UU.: 10 dígitos
+        isValid = phone.length === 10;
+        errorText = 'Por favor, ingresa un número válido de 10 dígitos para EE.UU. (ej. 1234567890).';
+    } else if (countryCode === '+1' && country === 'DO') {
+        // RD: 10 dígitos con código de área 809, 829, 849
+        const rdAreaCodes = ['809', '829', '849'];
+        isValid = phone.length === 10 && rdAreaCodes.includes(phone.slice(0, 3));
+        errorText = 'Por favor, ingresa un número válido de RD con código de área 809, 829 o 849 (ej. 8091234567).';
+    }
+
+    if (!isValid) {
+        errorMessage.textContent = errorText;
+        errorMessage.style.display = 'block';
+        return;
+    }
+
+    // Normalizar el número con el código de país
+    const normalizedPhone = `${countryCode}${phone}`;
+
+    // Buscar el invitado
+    const nombreInvitado = invitados[normalizedPhone];
+
     if (nombreInvitado) {
         errorMessage.style.display = 'none';
         downloadInvitation(nombreInvitado);
         downloadForm.reset();
+
+        // Disparar confeti
+        confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 },
+            colors: ['#606948', '#6F4E37', '#B5A691', '#6B8A7A'], // Colores de tu paleta
+            shapes: ['circle', 'square', 'star'],
+            scalar: 1.2
+        });
     } else {
+        errorMessage.textContent = 'Número no encontrado. Por favor, verifica e intenta de nuevo.';
         errorMessage.style.display = 'block';
+    }
+});
+
+// Actualizar el mensaje de ayuda según el país seleccionado
+document.getElementById('country-code').addEventListener('change', function () {
+    const countryCode = this.value;
+    const country = this.selectedOptions[0].dataset.country;
+    const phoneHelp = document.getElementById('phone-help');
+    const phoneInput = document.getElementById('phone');
+    if (countryCode === '+34') {
+        phoneHelp.textContent = 'Ingresa 9 dígitos (ej. 612345678).';
+        phoneInput.placeholder = 'Ej. 612345678';
+    } else if (countryCode === '+1' && country === 'US') {
+        phoneHelp.textContent = 'Ingresa 10 dígitos (ej. 1234567890).';
+        phoneInput.placeholder = 'Ej. 1234567890';
+    } else if (countryCode === '+1' && country === 'DO') {
+        phoneHelp.textContent = 'Ingresa 10 dígitos con código de área 809, 829 o 849 (ej. 8091234567).';
+        phoneInput.placeholder = 'Ej. 8091234567';
+    } else {
+        phoneHelp.textContent = 'Selecciona un país para ver el formato correcto.';
+        phoneInput.placeholder = 'Ingresa tu número';
     }
 });
 
@@ -82,22 +203,23 @@ function downloadInvitation(nombre) {
             document.body.removeChild(link);
             window.URL.revokeObjectURL(url);
 
-            // Eliminar el mensaje después de 5 segundos con un desvanecimiento más gradual
+            // Eliminar el mensaje después de 3 segundos
             setTimeout(() => {
                 thankYouMessage.style.opacity = '0';
                 setTimeout(() => {
                     document.body.removeChild(thankYouMessage);
-                }, 300); // Esperar a que termine la animación de desvanecimiento (1.2 segundos)
-            }, 1000); // Mostrar el mensaje durante 5 segundos
+                }, 500);
+            }, 3000);
         })
         .catch(error => {
             console.error('Error al descargar el PDF:', error);
-            errorMessage.textContent = 'Error al descargar la invitación';
+            errorMessage.textContent = 'Error al descargar la invitación. Por favor, intenta de nuevo.';
             errorMessage.style.display = 'block';
-            // Eliminar el mensaje de agradecimiento si hay error
             document.body.removeChild(thankYouMessage);
         });
 }
+
+// Resto del código sin cambios (animaciones, countdown, paleta de colores, mensajes de novios, etc.)
 // Animación al hacer scroll
 const fadeElements = document.querySelectorAll('.fade-in');
 const fadeObserver = new IntersectionObserver((entries) => {
@@ -158,13 +280,12 @@ const colorSwatches = document.querySelectorAll('.color-swatch');
 
 // Función para calcular el brillo del color y ajustar el texto
 function adjustTextColor(bgColor) {
-    // Convertir el color RGB a valores numéricos
     const rgb = bgColor.match(/\d+/g).map(Number);
-    const brightness = (rgb[0] * 299 + rgb[1] * 587 + rgb[2] * 114) / 1000; // Fórmula de luminancia
+    const brightness = (rgb[0] * 299 + rgb[1] * 587 + rgb[2] * 114) / 1000;
     const textElements = colorSection.querySelectorAll('h2, p, .icon');
-    
+
     textElements.forEach(el => {
-        el.style.color = brightness > 128 ? '#333' : '#fff'; // Negro si el fondo es claro, blanco si es oscuro
+        el.style.color = brightness > 128 ? '#333' : '#fff';
     });
 }
 
@@ -183,12 +304,11 @@ colorSwatches.forEach(swatch => {
     swatch.addEventListener('click', () => {
         const selectedColor = swatch.style.backgroundColor;
         colorSection.style.background = selectedColor;
-        adjustTextColor(selectedColor); // Ajustar el color del texto
+        adjustTextColor(selectedColor);
     });
 });
 
-
-//Mensaje novios
+// Mensaje novios
 const brideImage = document.querySelector('.image-wrapper.bride');
 const groomImage = document.querySelector('.image-wrapper.groom');
 const messageBoth = document.getElementById('message-both');
@@ -222,24 +342,3 @@ groomImage.addEventListener('click', () => {
         messageGroom.classList.add('active');
     }
 });
-
-// Bandera para asegurar que el confeti se lance solo una vez
-// let hasConfettiFired = false;
-
-// function launchConfetti() {
-//     if (hasConfettiFired) return;
-//     hasConfettiFired = true;
-//     const isMobile = /Mobi|Android/i.test(navigator.userAgent);
-//     confetti({
-//         particleCount: isMobile ? 50 : 100, // Menos partículas en móviles
-//         spread: 70,
-//         origin: { y: 0.6 },
-//         colors: ['#6B8A7A', '#A68B76', '#C9D2E2', '#B5A691'],
-//         shapes: ['circle', 'square', 'star'],
-//         scalar: 1.2,
-//         drift: 0.5,
-//     });
-// }
-
-// window.addEventListener('load', launchConfetti);
-

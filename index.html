@@ -207,12 +207,23 @@
             <p>Ingresa tu número de teléfono para descargar tu invitación personalizada.</p>
             <form id="download-invite-form">
                 <div class="form-group">
-                    <label for="phone">Número de teléfono (10 dígitos, ej. 1234567890)</label>
-                    <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" required placeholder="1234567890">
+                    <label for="country-code">País</label>
+                    <select id="country-code" name="country-code" required>
+                        <option value="" disabled selected>Selecciona tu país</option>
+                        <option value="+1" data-country="US">Estados Unidos (+1)</option>
+                        <option value="+1" data-country="DO">República Dominicana (+1)</option>
+                        <option value="+34" data-country="ES">España (+34)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Número de teléfono</label>
+                    <input type="tel" id="phone" name="phone" required placeholder="Ej. 1234567890" aria-describedby="phone-help">
+                    <small id="phone-help" class="form-text">Ingresa 10 dígitos para EE.UU./RD, 9 dígitos para España.</small>
                 </div>
                 <button type="submit" class="submit-btn">Descargar Invitación</button>
             </form>
-            <p id="error-message" style="color: red; display: none; margin-top: 1rem;">Número no encontrado. Por favor, verifica e intenta de nuevo.</p>
+            <p id="error-message" class="special-note" style="color: #6F4E37; display: none; margin-top: 1rem;">Número no encontrado. Por favor, verifica e intenta de nuevo.</p>
+            <p class="special-note privacy-note">Tu número será usado únicamente para descargarte la invitación personalizada.</p>
         </div>
     </section>
 
@@ -223,8 +234,8 @@
                 <p>Gracias por ser parte de nuestra historia de amor</p>
             </div>
             <div class="developer">
-                <img src="fotoWaner2.jpeg"Desarrollador" class="developer-img">
-                <p class="developer-label">Desarrollado por Elmu Ñeco (Waner Kevin)</p>
+<!--                <img src="fotoWaner2.jpeg"Desarrollador" class="developer-img">-->
+                <p class="developer-label">Desarrollado por WanerKevin</p>
             </div>
         </div>
     </footer>
